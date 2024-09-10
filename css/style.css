@@ -1,0 +1,8 @@
+*{
+    margin: 0;
+    padding :0;
+}
+.Tela{
+    background-image: linear-gradient(white,gray);
+    height: 100vh;
+}
