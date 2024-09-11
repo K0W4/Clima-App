@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -18,10 +19,11 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Direcionamento de Pasta -->
     <link rel="stylesheet" href="../css/style.css" />
-    <script src="../js/script.js" defer></script>
+    <script src="../js/scriptTeste.js" defer></script>
   </head>
-  
+
   <body>
     <div class="container">
       <div class="form">
@@ -37,8 +39,9 @@
         </button>
         </div>
       </div>
+
       <div id="weather-data" class="hide">
-        <h2><i class="fa-solid fa-location-dot"></i> <span id="city"></span> <img id="country"></img></h2>
+        <h2><i class="fa-solid fa-location-dot"></i> <span id="city"></span></h2>
         <p id="temperature"><span></span>&deg;C</p>
         <div id="description-container">
           <p id="description"></p>
@@ -55,12 +58,15 @@
           </p>
         </div>
       </div>
+
       <div id="error-message" class="hide">
         <p>Não foi possível encontrar o clima de uma cidade com este nome.</p>
       </div>
+
       <div id="loader" class="hide">
         <i class="fa-solid fa-spinner"></i>
       </div>
+
       <div id="suggestions">
         <button id="viena">Viena</button>
         <button id="copenhague">Copenhague</button>
