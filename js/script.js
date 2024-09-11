@@ -1,20 +1,15 @@
-// Criação das vairiáveis e seleção de elementos
-const geolocationAPI = new URL(`https://geocoding-api.open-meteo.com/v1/search`)
-const temperatureAPI = new URL(`https://api.open-meteo.com/v1/forecast`)
-const apiCountryURL = "https://countryflagsapi.com/png/";
-const apiUnsplash = "https://source.unsplash.com/1600x900/?";
-const locationSearch = document.querySelector('#city-input')
-const searchButton = document.querySelector('#search')
-//const apiKey = "0846f37a06e9059e35f8fd8f4b8c0c2d";
+const apiKeyWeather = "0846f37a06e9059e35f8fd8f4b8c0c2d";
+const apiKeyPixabay = "45935026-50e3298f885c52b053a9abf5f";
+const apiPixabay = "https://pixabay.com/api/?key=";
+
 const cityInput = document.querySelector("#city-input");
 const searchBtn = document.querySelector("#search");
-    
+
 const cityElement = document.querySelector("#city");
 const tempElement = document.querySelector("#temperature span");
 const descElement = document.querySelector("#description");
 const weatherIconElement = document.querySelector("#weather-icon");
-const countryElement = document.querySelector("#country");
-const humidityElement = document.querySelector("#humidity sapan");
+const umidityElement = document.querySelector("#umidity span");
 const windElement = document.querySelector("#wind span");
 
 const weatherContainer = document.querySelector("#weather-data");
@@ -22,74 +17,36 @@ const weatherContainer = document.querySelector("#weather-data");
 const errorMessageContainer = document.querySelector("#error-message");
 const loader = document.querySelector("#loader");
 
-const suggestionContainer = document.querySelector("#suggestions");
-const suggestionButtons = document.querySelectorAll("#suggestions button");
-
-// Funções
-async function requestGeolocation()
-{
-    let url = geolocationAPI + '?' + new URLSearchParams(
-    {
-        name: locationSearch.value,
-        count: '10',
-        language: 'en',
-        format: 'json'
-    })
-    const geolocationRequest = new Request(url)
-    const response = await fetch(geolocationRequest)
-
-    if(!response.ok)
-    {
-        throw new Error(response.statusText)
-    }
-
-    const json = await getGeolocation(response)
-    const geoArray = json.results
-
-    await temperatureRequest(geoArray[0].latitude, geoArray[0].longitude) // Arumar para pegar o certo
-}
-
-function getGeolocation(res)
-{
-    return res.json()
-}
-
-async function temperatureRequest(latitude, longitude)
-{
-    let url = temperatureAPI + '?' + new URLSearchParams(
-    {
-        latitude: latitude,
-        longitude: longitude,
-        current: ['temperature_2m','relative_humidity_2m', 'wind_speed_10m'],
-    })
-
-    const temperatureRequest = new Request(url)
-    const response = await fetch(temperatureRequest)
-
-    if(!response.ok)
-    {
-        throw new Error(response.statusText)
-    }
-
-    const json = await response.json()
-
-    const temperatures = json.current.temperature_2m
-    const humidity = json.current.relative_humidity_2m
-    const windSpeed = json.current.wind_speed_10m
- 
-    console.log('Temperaturas: ',temperatures)
-    console.log('Humidade: ',humidity)
-    console.log('Vento: ', windSpeed)
-}
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-searchButton.addEventListener('click', (e) => {
-    requestGeolocation()
-})
-
 // Loader
 const toggleLoader = () =>
 {
   loader.classList.toggle("hide");
+};
+
+// Função para buscar dados do tempo
+const getWeatherData = async (city) =>
+{
+  toggleLoader();
+
+  const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKeyWeather}&lang=pt_br`;
+
+  const res = await fetch(apiWeatherURL);
+  const data = await res.json();
+
+  toggleLoader();
+
+  return data;
+};
+
+// Função para buscar imagens no Pixabay
+const getPixabayImage = async (city) =>
+{
+  const apiImageURL = `${apiPixabay}${apiKeyPixabay}&q=${city}&image_type=photo&orientation=horizontal`;
+
+  const res = await fetch(apiImageURL);
+  const data = await res.json();
+
+  return data.hits[0].largeImageURL;
 };
 
 // Tratamento de erro
@@ -102,22 +59,24 @@ const hideInformation = () =>
 {
   errorMessageContainer.classList.add("hide");
   weatherContainer.classList.add("hide");
-
-  suggestionContainer.classList.add("hide");
 };
 
-/*const showWeatherData = async (temperature, des) =>
+// Mostra os dados do tempo e define o background
+const showWeatherData = async (city) =>
 {
   hideInformation();
 
-  if (data.cod === "404") {
+  const data = await getWeatherData(city);
+
+  if (data.cod === "404")
+  {
     showErrorMessage();
     return;
   }
 
-  cityElement.innerText = ;
-  tempElement.innerText = ;
-  descElement.innerText = ;
+  cityElement.innerText = data.name;
+  tempElement.innerText = parseInt(data.main.temp);
+  descElement.innerText = data.weather[0].description;
   weatherIconElement.setAttribute(
     "src",
     `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`
@@ -125,14 +84,15 @@ const hideInformation = () =>
   umidityElement.innerText = `${data.main.humidity}%`;
   windElement.innerText = `${data.wind.speed}km/h`;
 
-  // Change bg image
-  document.body.style.backgroundImage = `url("${apiUnsplash + city}")`;
+  const backgroundImage = await getPixabayImage(city);
+  document.body.style.backgroundImage = `url("${backgroundImage}")`;
 
   weatherContainer.classList.remove("hide");
 };
-*/
 
-searchBtn.addEventListener("click", async (e) => {
+// Evento de clique no botão de busca
+searchBtn.addEventListener("click", async (e) =>
+{
   e.preventDefault();
 
   const city = cityInput.value;
@@ -140,22 +100,13 @@ searchBtn.addEventListener("click", async (e) => {
   showWeatherData(city);
 });
 
+// Evento de pressionar "Enter" no input
 cityInput.addEventListener("keyup", (e) =>
 {
-  if (e.code === "Enter") {
+  if (e.code === "Enter")
+  {
     const city = e.target.value;
 
     showWeatherData(city);
   }
-});
-
-// Sugestões
-suggestionButtons.forEach((btn) =>
-{
-  btn.addEventListener("click", () =>
-  {
-    const city = btn.getAttribute("id");
-
-    showWeatherData(city);
-  });
 });
