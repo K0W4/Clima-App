@@ -1,14 +1,61 @@
 <!DOCTYPE html>
+
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clima</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Imports -->
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/script.js" defer></script>
 </head>
 
 <body>
-    <section class="Tela">
-    </section>
+    <div class="container">
+        <div class="form">
+            <h3>Confira o clima de uma cidade:</h3>
+            <div class="form-input-container">
+                <input 
+                    type="text" 
+                    placeholder="Digite o nome da cidade:" 
+                    id="city-input"
+                />
+                <button id="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+        <div id="weather-data">
+            <h2>
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="City">Porto Alegre</span>
+                <img src="" alt="Bandeira do país" id="country">
+            </h2>
+            <p id="temperature"><span>20</span>&deg;C</p>
+            <div id="description-container">
+                <p id="description">Ensolarado</p>
+                <img src="" alt="Condições do tempo" id="weather-icon">
+            </div>
+            <div id="details-container">
+                <p id="umidity">
+                    <i class="fa-solid fa-droplet"></i>
+                    <span>50%</span>
+                </p>
+                <p id="wind">
+                    <i class="fa-solid fa-wind"></i>
+                    <span>3km/h</span>
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
