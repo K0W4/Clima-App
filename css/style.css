@@ -12,7 +12,7 @@ body
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(180deg, rgba(89, 76, 238, 1) 0%, #8dd0f5 100%);
+  background-image: url(../images/bg-default.jpg);
   background-size: cover;
   background-position: center;
   overflow: hidden;
@@ -24,7 +24,7 @@ body
   position: relative;
   width: 400px;
   height: 100px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(30px);
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
@@ -41,13 +41,8 @@ body
   height: 55px;
   display: flex;
   align-items: center;
-}
-
-.search-box i
-{
-  position: absolute;
-  left: 10px;
-  font-size: 28px;
+  backdrop-filter: blur(50px);
+  border-radius: 40px;
 }
   
 .search-box input
@@ -58,12 +53,12 @@ body
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.2);
   outline: none;
-  border-radius: 10px;
+  border-radius: 40px;
   font-size: 22px;
   color: #fdfdfd;
   font-weight: 500;
   text-transform: uppercase;
-  padding: 0 48px 0 42px;
+  padding: 0px 0px 0px 20px;
 }
 
 .search-box input::placeholder
@@ -75,16 +70,24 @@ body
 .search-box button 
 {
   position: absolute;
-  right: 0;
-  width: 40px;
-  height: 100px;
+  right: 0px;
+  width: 50px;
+  height: 50px;
   background: transparent;
-  border: none;
+  border-radius: 100%;
+  border-color: transparent;
   outline: none;
+  padding: 0px 0px 0px 0px;
+  align-items: center;
   font-size: 28px;
   color: #fdfdfd;
-  padding: 0 40px 0 5px;
   cursor: pointer;
+}
+
+.search-box button:hover
+{
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #5e5e5e;
 }
   
 /* Weather & Not-Found */
@@ -123,7 +126,7 @@ body
  transition-delay: 1s; 
 }
 
-.weather-box .box .info-weaher
+.weather-box .box .info-weather
 {
   transform: translateY(-120%);
 }

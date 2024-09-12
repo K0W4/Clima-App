@@ -45,7 +45,8 @@ const showWeatherData = async (city) =>
 
     container.style.height = '555px';
     container.classList.add('active')
-    weatherBox.classList.add('active');weatherDetails.classList.add('active');
+    weatherBox.classList.add('active');
+    weatherDetails.classList.add('active');
     error404.classList.remove('active');
 
     setTimeout(() => {
@@ -85,11 +86,11 @@ const showWeatherData = async (city) =>
     temperature.innerHTML = `${parseInt(json.main.temp)}<span>°C</span>`;
     description.innerHTML = `${json.weather[0].description}`;
     humidity.innerHTML = `${json.main.humidity}%`;
-    wind.innerHTML = `${parseInt(json.wind.speed)}<span>°Km/h</span>`;
+    wind.innerHTML = `${parseInt(json.wind.speed)}<span>Km/h</span>`;
 
-    const infoWeather = document.querySelector('info-weather');
-    const infoHumidity = document.querySelector('info-humidity');
-    const infoWind = document.querySelector('info-wind');
+    const infoWeather = document.querySelector('.info-weather');
+    const infoHumidity = document.querySelector('.info-humidity');
+    const infoWind = document.querySelector('.info-wind');
 
     const elCloneInfoWeather = infoWeather.cloneNode(true);
     const elCloneInfoHumidity = infoHumidity.cloneNode(true);
