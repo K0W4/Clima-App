@@ -1,44 +1,101 @@
-const apiKeyWeather = "0846f37a06e9059e35f8fd8f4b8c0c2d";
 const apiKeyPixabay = "45935026-50e3298f885c52b053a9abf5f";
 const apiPixabay = "https://pixabay.com/api/?key=";
 
-const cityInput = document.querySelector("#city-input");
-const searchBtn = document.querySelector("#search");
+const container = document.querySelector('.container');
+const search = document.querySelector(".search-box button");
+const weatherBox = document.querySelector(".weather-box");
+const weatherDetails = document.querySelector(".weather-details");
+const error404 = document.querySelector(".not-found");
+const cityInput = document.querySelector('.search-box input');
 
-const cityElement = document.querySelector("#city");
-const tempElement = document.querySelector("#temperature span");
-const descElement = document.querySelector("#description");
-const weatherIconElement = document.querySelector("#weather-icon");
-const umidityElement = document.querySelector("#umidity span");
-const windElement = document.querySelector("#wind span");
-
-const weatherContainer = document.querySelector("#weather-data");
-
-const errorMessageContainer = document.querySelector("#error-message");
-const loader = document.querySelector("#loader");
-
-// Loader
-const toggleLoader = () =>
+const showWeatherData = async (city) =>
 {
-  loader.classList.toggle("hide");
+  const APIKey = "0846f37a06e9059e35f8fd8f4b8c0c2d";
+
+  if (city === '')
+    return;
+
+  const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}&lang=pt_br`);
+  const json = await weatherResponse.json();
+
+  if (json.cod == '404')
+  {
+    container.style.height = '400px';
+    weatherBox.classList.remove('active');
+    weatherDetails.classList.remove('active');
+    error404.classList.add('active');
+    return;
+  }
+
+  container.style.height = '555px';
+  weatherBox.classList.add('active');
+  weatherDetails.classList.add('active');
+  error404.classList.remove('active');
+
+  const image = document.querySelector('.weather-box img');
+  const temperature = document.querySelector('.weather-box .temperature');
+  const description = document.querySelector('.weather-box .description');
+  const humidity = document.querySelector('.weather-details .humidity span');
+  const wind = document.querySelector('.weather-details .wind span');
+
+  switch (json.weather[0].main)
+  {
+    case 'Clear':
+      image.src = '../images/clear.png';
+      break;
+
+    case 'Rain':
+      image.src = '../images/rain.png';
+      break;
+
+    case 'Snow':
+      image.src = '../images/snow.png';
+      break;
+
+    case 'Clouds':
+      image.src = '../images/cloud.png';
+      break;
+
+    case 'Mist':
+      image.src = '../images/mist.png';
+      break;
+
+    case 'Haze':
+      image.src = '../images/mist.png';
+      break;
+
+    default:
+      image.src = '../images/cloud.png';
+  }
+
+  temperature.innerHTML = `${parseInt(json.main.temp)}<span>°C</span>`;
+  description.innerHTML = `${json.weather[0].description}`;
+  humidity.innerHTML = `${json.main.humidity}%`;
+  wind.innerHTML = `${parseInt(json.wind.speed)}<span>°Km/h</span>`;
+
+  const backgroundImage = await getPixabayImage(city);
+  const img = new Image();
+  img.src = backgroundImage;
+  img.onload = () => {
+    document.body.style.backgroundImage = `url("${backgroundImage}")`;
+  };
 };
 
-// Função para buscar dados do tempo
-const getWeatherData = async (city) =>
+search.addEventListener("click", () =>
 {
-  toggleLoader();
+  const city = cityInput.value;
+  showWeatherData(city);
+});
 
-  const apiWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKeyWeather}&lang=pt_br`;
+cityInput.addEventListener("keyup", (e) =>
+{
+  if (e.code === "Enter")
+  {
+    const city = e.target.value;
+    showWeatherData(city);
+  }
+});
 
-  const res = await fetch(apiWeatherURL);
-  const data = await res.json();
-
-  toggleLoader();
-
-  return data;
-};
-
-// Função para buscar imagens no Pixabay
 const getPixabayImage = async (city) =>
 {
   const apiImageURL = `${apiPixabay}${apiKeyPixabay}&q=${city}&image_type=photo&orientation=horizontal`;
@@ -48,65 +105,3 @@ const getPixabayImage = async (city) =>
 
   return data.hits[0].largeImageURL;
 };
-
-// Tratamento de erro
-const showErrorMessage = () =>
-{
-  errorMessageContainer.classList.remove("hide");
-};
-
-const hideInformation = () =>
-{
-  errorMessageContainer.classList.add("hide");
-  weatherContainer.classList.add("hide");
-};
-
-// Mostra os dados do tempo e define o background
-const showWeatherData = async (city) =>
-{
-  hideInformation();
-
-  const data = await getWeatherData(city);
-
-  if (data.cod === "404")
-  {
-    showErrorMessage();
-    return;
-  }
-
-  cityElement.innerText = data.name;
-  tempElement.innerText = parseInt(data.main.temp);
-  descElement.innerText = data.weather[0].description;
-  weatherIconElement.setAttribute(
-    "src",
-    `http://openweathermap.org/img/wn/${data.weather[0].icon}.png`
-  );
-  umidityElement.innerText = `${data.main.humidity}%`;
-  windElement.innerText = `${data.wind.speed}km/h`;
-
-  const backgroundImage = await getPixabayImage(city);
-  document.body.style.backgroundImage = `url("${backgroundImage}")`;
-
-  weatherContainer.classList.remove("hide");
-};
-
-// Evento de clique no botão de busca
-searchBtn.addEventListener("click", async (e) =>
-{
-  e.preventDefault();
-
-  const city = cityInput.value;
-
-  showWeatherData(city);
-});
-
-// Evento de pressionar "Enter" no input
-cityInput.addEventListener("keyup", (e) =>
-{
-  if (e.code === "Enter")
-  {
-    const city = e.target.value;
-
-    showWeatherData(city);
-  }
-});
