@@ -12,7 +12,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 min-height: 100vh;
-background-image: url(Clima-App/images/bg-default.jpg);
+background-image: url(/Clima-App/images/bg-default.jpg);
 background-size: cover;
 background-position: center;
 overflow: hidden;
