@@ -169,7 +169,7 @@ function setWeatherData(json){
   temperature.innerHTML = `${parseInt(json.main.temp)}<span>°C</span>`;
   description.innerHTML = `${json.weather[0].description}`;
   humidity.innerHTML = `${json.main.humidity}%`;
-  wind.innerHTML = `${parseInt(json.wind.speed)}<span>°Km/h</span>`;
+  wind.innerHTML = `${parseInt(json.wind.speed)}<span>Km/h</span>`;
 }
 
 /**
